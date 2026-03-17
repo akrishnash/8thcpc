@@ -239,17 +239,20 @@
         position: relative;
       }
 
-      .card-thumb img {
+      .card-thumb img.lazy-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s ease-out;
+        transition: transform 0.3s ease-out, opacity 0.35s ease;
+        display: block;
       }
 
-      .news-card:hover .card-thumb img { transform: scale(1.04); }
+      .news-card:hover .card-thumb img.lazy-img { transform: scale(1.04); }
 
-      /* Placeholder thumb */
+      /* Placeholder thumb — sits behind the image */
       .card-thumb-placeholder {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         display: flex;
@@ -258,6 +261,7 @@
         flex-direction: column;
         gap: 0.4rem;
         font-size: 2rem;
+        z-index: 0;
       }
 
       .thumb-label {
@@ -504,8 +508,7 @@
       }
 
       function sourceDisplayName(raw) {
-        // Google RSS author field often contains the publisher name
-        return raw.replace(/\s*-\s*.*$/, "").trim() || "Source";
+        return raw || "News";
       }
 
       function relativeTime(dateStr) {
@@ -546,14 +549,22 @@
       }
 
       function parseItems(payload) {
-        return (Array.isArray(payload?.items) ? payload.items : []).map(item => ({
-          title:    item.title?.trim() || "Untitled",
-          link:     item.link?.trim()  || "#",
-          pubDate:  item.pubDate?.trim() || "",
-          source:   item.author?.trim() || "Source",
-          image:    extractImage(item),
-          category: itemCategory(item.title || ""),
-        }));
+        return (Array.isArray(payload?.items) ? payload.items : []).map(item => {
+          const rawTitle = item.title?.trim() || "Untitled";
+          // Google News RSS embeds publisher as: "Article Title - Publisher Name"
+          const titleMatch = rawTitle.match(/^([\s\S]+?)\s+-\s+([^-]{2,60})$/);
+          const title  = titleMatch ? titleMatch[1].trim() : rawTitle;
+          const source = titleMatch ? titleMatch[2].trim()
+                       : (item.author?.trim() || item.source?.trim() || "News");
+          return {
+            title,
+            link:     item.link?.trim()  || "#",
+            pubDate:  item.pubDate?.trim() || "",
+            source,
+            image:    extractImage(item), // RSS image (often null for Google News)
+            category: itemCategory(title),
+          };
+        });
       }
 
       function dedupeAndSort(items) {
@@ -583,23 +594,35 @@
           return;
         }
 
+        const imgObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const img = entry.target;
+            img.src = img.dataset.src;
+            imgObserver.unobserve(img);
+          });
+        }, { rootMargin: "200px" });
+
         for (const item of filtered) {
           const palette = sourcePalette(item.source);
           const displaySource = sourceDisplayName(item.source);
           const timeStr = relativeTime(item.pubDate);
 
+          // Use RSS image if available, otherwise microlink to fetch article's og:image
+          const imgSrc = item.image
+            || `https://api.microlink.io?url=${encodeURIComponent(item.link)}&embed=image.url`;
+          const icon = PLACEHOLDER_ICONS[Math.abs(hashStr(item.source)) % PLACEHOLDER_ICONS.length];
+
           let thumbHtml;
-          if (item.image) {
+          {
             thumbHtml = `<div class="card-thumb">
-              <img src="${item.image}" alt="" loading="lazy" onerror="this.parentElement.replaceWith(makePlaceholder('${escHtml(displaySource)}', '${palette.bg}', '${palette.text}'))">
-            </div>`;
-          } else {
-            const icon = PLACEHOLDER_ICONS[Math.abs(hashStr(item.source)) % PLACEHOLDER_ICONS.length];
-            thumbHtml = `<div class="card-thumb">
-              <div class="card-thumb-placeholder" style="background:linear-gradient(135deg,${palette.bg.replace('22','44')},${palette.bg});">
+              <div class="card-thumb-placeholder" style="background:linear-gradient(135deg,${palette.bg.replace('22','44')},${palette.bg});position:absolute;inset:0;">
                 <span>${icon}</span>
                 <span class="thumb-label" style="color:${palette.text}">${escHtml(displaySource)}</span>
               </div>
+              <img data-src="${escHtml(imgSrc)}" alt="" class="lazy-img"
+                style="opacity:0;transition:opacity 0.35s ease;position:relative;z-index:1;"
+                onerror="this.style.display='none'">
             </div>`;
           }
 
@@ -618,16 +641,16 @@
               <div class="card-arrow">Read article →</div>
             </div>`;
           newsList.appendChild(li);
+
+          // Wire up lazy image: observe, fade in on load
+          const lazyImg = li.querySelector(".lazy-img");
+          if (lazyImg) {
+            lazyImg.addEventListener("load", () => { lazyImg.style.opacity = "1"; });
+            imgObserver.observe(lazyImg);
+          }
         }
 
         newsCount.textContent = `Showing ${filtered.length} of ${items.length} articles`;
-      }
-
-      function makePlaceholder(src, bg, color) {
-        const div = document.createElement("div");
-        div.className = "card-thumb";
-        div.innerHTML = `<div class="card-thumb-placeholder" style="background:linear-gradient(135deg,${bg},${bg.replace('22','11')});"><span>📰</span><span class="thumb-label" style="color:${color}">${escHtml(src)}</span></div>`;
-        return div;
       }
 
       function showSkeleton() {
