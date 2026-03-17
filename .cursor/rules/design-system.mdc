@@ -1,0 +1,34 @@
+---
+description: Dark-first design, Bento, glassmorphism, neo-brutalism, minimalist monochrome
+globs: "**/*.{tsx,css,global.css}"
+alwaysApply: true
+---
+
+# Design System & Aesthetics
+
+## Dark Mode First
+- **Design in dark mode by default.** Avoid the generic "white background / blue link" look.
+- Use dark backgrounds (e.g. `bg-zinc-950`, `bg-neutral-900`) and light text. Define a dark-first palette in Tailwind/theme.
+
+## Layout: Bento Grid
+- For **tiled, sectioned layouts** (Apple/Linear style), use a **Bento Grid**: CSS Grid with varied cell sizes, clear sections, and consistent gaps (`gap-8` or higher).
+- Combine `grid-cols-*` and `row-span-*` / `col-span-*` for asymmetric, content-driven tiles.
+
+## Glassmorphism
+- Use **frosted glass** for overlays, cards, or nav: `backdrop-blur-md` (or `backdrop-blur-xl`) plus semi-transparent backgrounds (e.g. `bg-white/10`, `bg-zinc-900/80`).
+- Pair with subtle borders like `border border-white/10` for definition.
+
+## Neo-Brutalism
+- When going bold: **thick borders** (e.g. `border-2` or `border-4`), **high contrast** (black/white or strong accent vs background), and **hard shadows** (e.g. `shadow-[4px_4px_0_0_rgba(0,0,0,1)]`).
+- Use for CTAs, cards, or key UI blocks to create a strong, graphic look.
+
+## Minimalist Monochromatic
+- For **high-end, clean** sections: restrict to **black, white, and grays**. Avoid color accents; use typography, spacing, and subtle borders for hierarchy.
+- Prefer `font-medium` / `font-semibold` and size scale over decoration.
+
+## Choosing a Style
+- **Bento Grid**: structure and layout.
+- **Glassmorphism**: modals, nav bars, floating panels.
+- **Neo-brutalism**: primary actions, feature cards, marketing blocks.
+- **Minimalist Monochromatic**: hero, pricing, or editorial areas.
+- **Dark mode first**: apply across all of the above unless a section explicitly calls for light.

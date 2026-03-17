@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <meta name="google-adsense-account" content="ca-pub-5838992192903217" />
+    <title>8th Pay News Crawler</title>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5838992192903217"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #0b1220;
+        color: #e5e7eb;
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(28px, 3vw, 40px);
+      }
+
+      .sub {
+        margin: 0 0 20px;
+        color: #9ca3af;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      button,
+      .link-btn {
+        border: 1px solid #334155;
+        background: #111827;
+        color: #e5e7eb;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      button:hover,
+      .link-btn:hover {
+        background: #1f2937;
+      }
+
+      .status {
+        margin: 0 0 16px;
+        color: #93c5fd;
+        font-size: 14px;
+      }
+
+      .news-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .news-item {
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 12px;
+        background: #111827;
+      }
+
+      .news-item a {
+        color: #f8fafc;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .news-item a:hover {
+        text-decoration: underline;
+      }
+
+      .meta {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>8th Pay News Crawler</h1>
+      <p class="sub">Live updates on 8th Pay Commission, DA hikes, and salary revisions.</p>
+
+      <div class="controls">
+        <button id="refreshNews" type="button">Refresh News</button>
+        <a
+          class="link-btn"
+          href="https://news.google.com/search?q=8th%20pay%20commission%20OR%20dearness%20allowance%20hike%20OR%20salary%20revision%20central%20government&hl=en-IN&gl=IN&ceid=IN:en"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open All News
+        </a>
+      </div>
+
+      <p id="newsStatus" class="status">Loading updates...</p>
+      <ul id="newsList" class="news-list"></ul>
+    </main>
+
+    <script>
+      const NEWS_QUERIES = [
+        "8th pay commission update",
+        "dearness allowance hike central government employees",
+        "salary revision central government employees"
+      ];
+      const MAX_ITEMS = 20;
+      const openAllBtn = document.querySelector(".link-btn");
+      const newsStatus = document.getElementById("newsStatus");
+      const newsList = document.getElementById("newsList");
+      const refreshNewsBtn = document.getElementById("refreshNews");
+
+      function buildGoogleRss(query) {
+        const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(
+          query
+        )}&hl=en-IN&gl=IN&ceid=IN:en`;
+        return `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+      }
+
+      function parseItems(payload) {
+        const items = Array.isArray(payload?.items) ? payload.items : [];
+        return items.map((item) => {
+          const title = item.title?.trim() || "Untitled";
+          const link = item.link?.trim() || "#";
+          const pubDate = item.pubDate?.trim() || "";
+          const source = item.author?.trim() || "Source";
+          return { title, link, pubDate, source };
+        });
+      }
+
+      function dedupeAndSort(items) {
+        const seen = new Set();
+        const unique = [];
+        for (const item of items) {
+          const key = `${item.title}|${item.link}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          unique.push(item);
+        }
+        unique.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        return unique.slice(0, MAX_ITEMS);
+      }
+
+      function render(items) {
+        newsList.innerHTML = "";
+        if (!items.length) {
+          newsStatus.textContent =
+            "Live feed unavailable right now. Use Open All News links below.";
+          const fallbackLinks = NEWS_QUERIES.map((query) => {
+            const url = `https://news.google.com/search?q=${encodeURIComponent(
+              query
+            )}&hl=en-IN&gl=IN&ceid=IN:en`;
+            return `<li class="news-item"><a href="${url}" target="_blank" rel="noopener noreferrer">Open results for: ${query}</a></li>`;
+          }).join("");
+          newsList.innerHTML = fallbackLinks;
+          return;
+        }
+        newsStatus.textContent = `Showing ${items.length} latest updates.`;
+        for (const item of items) {
+          const li = document.createElement("li");
+          li.className = "news-item";
+          li.innerHTML = `
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+            <div class="meta">${item.source} • ${item.pubDate || "No date"}</div>
+          `;
+          newsList.appendChild(li);
+        }
+      }
+
+      async function loadNews() {
+        newsStatus.textContent = "Fetching latest headlines...";
+        const tasks = NEWS_QUERIES.map((q) =>
+          fetch(buildGoogleRss(q), { cache: "no-store" })
+            .then((r) => {
+              if (!r.ok) throw new Error(`Feed error: ${r.status}`);
+              return r.json();
+            })
+            .then(parseItems)
+        );
+
+        const settled = await Promise.allSettled(tasks);
+        const all = [];
+        settled.forEach((result) => {
+          if (result.status === "fulfilled") {
+            all.push(...result.value);
+          }
+        });
+
+        render(dedupeAndSort(all));
+      }
+
+      refreshNewsBtn.addEventListener("click", loadNews);
+      loadNews();
+    </script>
+  </body>
+</html>

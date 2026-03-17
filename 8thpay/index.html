@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8th Pay Commission Salary Calculator | 8th CPC Pay Matrix</title>
+
+    <meta
+      name="description"
+      content="Calculate your expected salary under the 8th Pay Commission using the latest pay matrix and fitment factor projections for central government employees."
+    />
+    <meta
+      name="keywords"
+      content="8th pay commission calculator, 8th cpc salary calculator, 8th pay matrix, 8th pay commission news, government salary calculator india"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://8thcpc.co.in/" />
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="8th Pay Commission Salary Calculator 2026" />
+    <meta
+      property="og:description"
+      content="Fast, mobile-friendly 8th Pay Commission salary calculator with pay matrix and fitment factor projections."
+    />
+    <meta property="og:url" content="https://8thcpc.co.in/" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "8th Pay Commission Salary Calculator",
+        "url": "https://8thcpc.co.in/",
+        "description": "8th Pay Commission salary calculator and information portal for government employees.",
+        "inLanguage": "en"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "When will the 8th Pay Commission be implemented?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most analysts expect the 8th Pay Commission salary revision to take effect around 2026, following a pattern similar to previous Central Pay Commissions. The exact notification date will depend on the Government of India\u2019s final decision."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the expected 8th Pay Commission fitment factor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Experts often estimate an 8th Pay Commission fitment factor in the range of 2.8 to 3.5. This calculator lets you try different fitment factors so you can see how your basic pay and gross salary may change under multiple scenarios."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will pensioners benefit from the 8th Pay Commission?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Traditionally, Central Government pensioners receive revised pensions whenever new Pay Commission recommendations are implemented. The final rules for 8th CPC pension revision will be known only after official recommendations are accepted and notified."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5838992192903217" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5838992192903217"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Fonts & styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="site-shell">
+      <header class="header">
+        <div class="container nav">
+          <div class="logo">
+            <span class="logo-badge">8</span>
+            <div class="logo-text">
+              <span>Pay Commission</span>
+              <strong>8th CPC Calculator</strong>
+            </div>
+          </div>
+
+          <nav>
+            <a href="#calculator">Calculator</a>
+            <a href="#about">About</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="container hero-inner">
+            <div class="hero-copy">
+              <p class="hero-kicker">Quick 8th CPC estimate</p>
+              <h1>8th Pay Commission Salary Calculator</h1>
+              <p class="hero-lead">
+                Fill in the form below to see an instant projection of your possible 8th CPC salary.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="calculator" class="container calculator">
+          <div class="calculator-header">
+            <h2>Salary Calculator</h2>
+            <p>Select your pay level, cell and allowances to project your possible 8th CPC salary.</p>
+          </div>
+
+          <div class="grid">
+            <div class="form card">
+              <label for="payLevel">Pay Level</label>
+              <select id="payLevel">
+                <option value="">Select level</option>
+              </select>
+
+              <label for="progressionIndex">Progression Cell</label>
+              <select id="progressionIndex" disabled>
+                <option value="">Select cell</option>
+              </select>
+
+              <label for="fitmentFactor">Fitment Factor</label>
+              <input id="fitmentFactor" type="number" value="2.0" step="0.01" />
+
+              <label for="taAmount">Transport Allowance (₹)</label>
+              <input id="taAmount" type="number" value="3600" />
+
+              <label for="otherAllowances">Other Allowances (₹)</label>
+              <input id="otherAllowances" type="number" value="0" />
+
+              <label for="hraPercent">HRA %</label>
+              <select id="hraPercent">
+                <option value="8">8%</option>
+                <option value="16">16%</option>
+                <option value="24" selected>24%</option>
+                <option value="30">30%</option>
+              </select>
+
+              <label for="otherDeductions">Other Deductions</label>
+              <input id="otherDeductions" type="number" value="0" />
+
+              <button id="calcBtn">Calculate Salary</button>
+              <p class="small-note">
+                Tip: You can also change values directly and results update live.
+              </p>
+            </div>
+
+            <div class="results card">
+              <h3>Salary Projection</h3>
+              <div class="result">New Basic <span id="newBasic">₹ 0</span></div>
+              <div class="result">HRA <span id="hra">₹ 0</span></div>
+              <div class="result">DA <span id="da">₹ 0</span></div>
+
+              <div class="result total">Gross Salary <span id="gross">₹ 0</span></div>
+
+              <div class="result">Total Deductions <span id="deductions">₹ 0</span></div>
+              <div class="result total">Net Salary <span id="net">₹ 0</span></div>
+
+              <div class="result">Annual Gross <span id="annualGross">₹ 0</span></div>
+              <div class="result">Post‑Tax Annual <span id="postTaxAnnual">₹ 0</span></div>
+              <div class="result">Income Tax (annual) <span id="incomeTax">₹ 0</span></div>
+
+              <div class="result total">Post‑Tax Monthly <span id="postTaxMonthly">₹ 0</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="container ad-section" aria-label="Sponsored information">
+          <div class="ad-card">
+            <div class="ad-label">Sponsored</div>
+            <p class="ad-copy">
+              This section is reserved for Google AdSense. Replace the slot ID below with your live
+              unit from the AdSense dashboard.
+            </p>
+            <ins
+              class="adsbygoogle"
+              style="display:block"
+              data-ad-client="ca-pub-5838992192903217"
+              data-ad-slot="YOUR_AD_SLOT_ID"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        </section>
+
+        <section id="about" class="container about">
+          <h2>How This 8th Pay Commission Calculator Works</h2>
+          <p>
+            This 8th Pay Commission Salary Calculator is designed to give Central Government
+            employees a quick, transparent view of what their future pay might look like under
+            different 8th CPC scenarios. It focuses on the key building blocks used in every pay
+            commission: basic pay, pay matrix level, fitment factor, dearness allowance (DA),
+            House Rent Allowance (HRA), Transport Allowance (TA) and any other recurring
+            allowances you receive each month.
+          </p>
+          <p>
+            To get started, scroll to the
+            <a href="#calculator">salary calculator section</a> and select your current pay level
+            and progression cell from the 7th CPC pay matrix. Then choose a fitment factor (for
+            example 2.8, 3.0 or 3.5) to see how your basic pay could be revised under a possible
+            8th Pay Commission. The tool applies the chosen factor to your existing basic pay and
+            recalculates your projected new basic using an 8th CPC style pay matrix.
+          </p>
+          <p>
+            After the new basic is estimated, the calculator works out your HRA based on the HRA
+            percentage you select, adds your Transport Allowance and other allowances, and then
+            shows your projected gross salary. You can adjust every input\u2014including fitment
+            factor, HRA percentage and allowance amounts\u2014to compare multiple scenarios
+            side-by-side and understand how sensitive your monthly and annual income is to these
+            assumptions.
+          </p>
+          <p>
+            Since the official 8th Pay Commission recommendations and final pay matrix are not yet
+            notified, all figures generated by this 8th CPC calculator are hypothetical
+            projections meant for planning and awareness only. They are not official or legally
+            binding. However, by experimenting with fitment factors that experts commonly discuss
+            (such as 2.8 to 3.5) you can build a reasonable expectation of how your take-home pay
+            and total annual compensation might change.
+          </p>
+          <p>
+            For a deeper understanding of terms like pay matrix, pay level, cell progression and
+            fitment factor, you can read the short guide below and then return to the
+            <a href="#calculator">8th CPC salary calculator</a> to try different combinations. If
+            you still have questions after using the tool, check the
+            <a href="#faq">Frequently Asked Questions</a> section where we answer common doubts
+            about the upcoming 8th Pay Commission.
+          </p>
+        </section>
+
+        <section class="container about" aria-label="8th CPC pay matrix explanation">
+          <h2>Understanding the 8th CPC Pay Matrix &amp; Fitment Factor</h2>
+          <p>
+            Every Central Pay Commission introduces a new pay matrix that replaces the older pay
+            scales. Under the 7th CPC, employees are placed in pay levels and cells based on their
+            grade pay and years of service. For the 8th Pay Commission, a similar pay matrix is
+            expected, but with higher basic pay at each level. The fitment factor is applied to
+            your current basic to arrive at a new notional basic, which is then mapped to the
+            nearest cell in the new matrix.
+          </p>
+          <p>
+            The fitment factor is one of the most discussed numbers before any pay commission is
+            implemented. A higher factor generally means a larger jump in basic pay and therefore
+            higher HRA, DA and pension. For example, if your current basic is ₹50,000 and you test
+            a fitment factor of 3.0, your notional new basic becomes ₹150,000 before it is aligned
+            to an appropriate cell in the 8th CPC pay matrix. This calculator lets you simulate
+            such jumps instantly so you can plan for EMIs, savings and long-term financial goals.
+          </p>
+          <p>
+            Allowances also play a significant role in your final in-hand pay. HRA is usually
+            expressed as a percentage of basic pay and varies by city class, while Transport
+            Allowance and other special allowances may be fixed or partially indexed to DA. By
+            including Transport Allowance, additional allowances and an estimate of other
+            deductions, this tool goes beyond a simple basic pay calculator and gives you a more
+            realistic view of your projected gross and net salary.
+          </p>
+          <p>
+            Remember that any official 8th Pay Commission notification may also change DA rates,
+            HRA slabs and eligibility rules. Use this tool as an educational aid to understand how
+            changes in the pay matrix and fitment factor can impact your earnings, and always
+            cross-check with official circulars once they are released by the Government of India.
+          </p>
+        </section>
+
+        <section id="faq" class="container faq">
+          <h2>Frequently Asked Questions</h2>
+
+          <h3>When will the 8th Pay Commission be implemented?</h3>
+          <p>Most analysts expect the next pay revision to take effect around 2026.</p>
+
+          <h3>What is the expected fitment factor?</h3>
+          <p>Experts estimate a fitment factor between 2.8 and 3.5 depending on economic conditions.</p>
+
+          <h3>Will pensioners benefit?</h3>
+          <p>
+            Yes, pensioners generally receive revised pensions when new pay commission
+            recommendations are implemented.
+          </p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          <p>© 2026 8th Pay Commission Information Portal</p>
+
+          <div class="social-share" aria-label="Share this 8th Pay Commission calculator">
+            <span>Share this page:</span>
+            <a
+              href="https://twitter.com/intent/tweet?url=https%3A%2F%2F8thcpc.co.in%2F&text=8th%20Pay%20Commission%20Salary%20Calculator"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              X
+            </a>
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F8thcpc.co.in%2F"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Facebook
+            </a>
+            <a
+              href="https://wa.me/?text=8th%20Pay%20Commission%20Salary%20Calculator%20-%208thcpc.co.in%20https%3A%2F%2F8thcpc.co.in%2F"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+          </div>
+
+          <div class="seo-widget">
+            <a
+              href="https://www.seobility.net/en/seocheck/check?url=https%3A%2F%2F8thcpc.co.in%2F"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://app.seobility.net/widget/widget.png?url=https%3A%2F%2F8thcpc.co.in%2F"
+                alt="Seobility Score for 8thcpc.co.in"
+              />
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
