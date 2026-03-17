@@ -62,31 +62,49 @@
     return row.progression[idx] || 0;
   }
 
+  // FY 2025-26 new regime (Budget 2025) — ₹75,000 standard deduction + 87A rebate up to ₹12L
   function calcTax(annualGross) {
     if (annualGross <= 0) return 0;
+    const STANDARD_DEDUCTION = 75000;
+    const taxable = Math.max(0, annualGross - STANDARD_DEDUCTION);
     const slabs = [
-      { limit: 250000, rate: 0 },
-      { limit: 500000, rate: 0.05 },
-      { limit: 750000, rate: 0.10 },
-      { limit: 1000000, rate: 0.15 },
-      { limit: 1250000, rate: 0.20 },
-      { limit: 1500000, rate: 0.25 },
+      { limit: 400000,  rate: 0    },
+      { limit: 800000,  rate: 0.05 },
+      { limit: 1200000, rate: 0.10 },
+      { limit: 1600000, rate: 0.15 },
+      { limit: 2000000, rate: 0.20 },
+      { limit: 2400000, rate: 0.25 },
       { limit: Infinity, rate: 0.30 }
     ];
     let tax = 0;
     let prevLimit = 0;
     for (let i = 0; i < slabs.length; i++) {
       const slab = slabs[i];
-      const taxableInSlab = Math.max(0, Math.min(annualGross, slab.limit) - prevLimit);
+      const taxableInSlab = Math.max(0, Math.min(taxable, slab.limit) - prevLimit);
       tax += taxableInSlab * slab.rate;
       prevLimit = slab.limit;
-      if (annualGross <= slab.limit) break;
+      if (taxable <= slab.limit) break;
     }
-    return Math.round(tax);
+    tax = Math.round(tax);
+    // Section 87A rebate: nil tax if taxable income ≤ ₹12 lakh
+    return taxable <= 1200000 ? 0 : tax;
   }
 
   function updateResults() {
+    const emptyEl = document.getElementById("resultsEmpty");
+    const dataEl  = document.getElementById("resultsData");
+
     const currentBasic = getCurrentBasic();
+
+    if (currentBasic === 0) {
+      if (emptyEl) emptyEl.hidden = false;
+      if (dataEl)  dataEl.hidden  = true;
+      return;
+    }
+
+    if (emptyEl) emptyEl.hidden = true;
+    if (dataEl)  dataEl.hidden  = false;
+
     const fitment = getInputNumber("fitmentFactor", 2);
     const ta = getInputNumber("taAmount", 3600);
     const otherAllowances = getInputNumber("otherAllowances", 0);
@@ -139,7 +157,6 @@
         payMatrix = data.pay_matrix || [];
         populatePayLevels();
         addListeners();
-        updateResults();
       })
       .catch(function () {
         payLevelSelect.innerHTML = '<option value="">Failed to load pay matrix</option>';
